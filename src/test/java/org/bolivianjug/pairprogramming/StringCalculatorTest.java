@@ -18,5 +18,18 @@ class StringCalculatorTest {
         Assertions.assertEquals(1, stringCalculator.add("1"));
         Assertions.assertEquals(3, stringCalculator.add("1,2"));
     }
-    
+
+    @Test
+    public void validacionCasoNegativos() {
+        StringCalculator stringCalculator = new StringCalculator();
+        Assertions.assertEquals(-3, stringCalculator.add("-1,-2"));
+    }
+
+    @Test
+    public void manejoDeCantidadesDesconocidas() {
+        StringCalculator stringCalculator = new StringCalculator();
+        Assertions.assertEquals(6, stringCalculator.add("1,2,3"));
+        Assertions.assertEquals(610, stringCalculator.add("100,200,310"));
+        Assertions.assertEquals(0, stringCalculator.add("100,-200,110,-10"));
+    }
 }
