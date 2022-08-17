@@ -2,6 +2,10 @@ package org.bolivianjug.pairprogramming;
 
 import org.junit.jupiter.api.*;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 /**
  * Created by julio.rocha on 17/8/22.
  *
@@ -26,7 +30,8 @@ class StringCalculatorTest {
 
     @Test
     public void validacionCasoNegativos() {
-        Assertions.assertEquals(-3, stringCalculator.add("-1,-2"));
+        StringCalculator.NegativeNumber negativeNumber = assertThrows(StringCalculator.NegativeNumber.class, () -> stringCalculator.add("-1,3,-2,6"));
+        assertThat(negativeNumber.getMessage(), is("Negativos no permitidos: -1,-2"));
     }
 
     @Test
@@ -36,11 +41,6 @@ class StringCalculatorTest {
         Assertions.assertEquals(0, stringCalculator.add("100,-200,110,-10"));
     }
 
-    /*
-    * Permitir que el método add maneje nuevas líneas(\n) entre números (en lugar de comas):
-Por ejemplo, la siguiente entrada está es correcta: "1\n2,3" (será igual a 6)
-La siguiente entrada NO está bien: "1,\n" (no es necesario probarlo, aclarando el ejemplo)
-    * */
     @Test
     public void manejoDeSaltosDeLinea() {
         Assertions.assertEquals(6, stringCalculator.add("1\n2,3"));
@@ -54,6 +54,7 @@ La siguiente entrada NO está bien: "1,\n" (no es necesario probarlo, aclarando 
     public void manejoSaltoLineaNegativo() {
         Assertions.assertEquals(620, stringCalculator.add("100\n200,310,10,\n"));
     }
+
     @Test
     @DisplayName("delimitador personalizado")
     public void admitirDiferentesDelimitadores() {
