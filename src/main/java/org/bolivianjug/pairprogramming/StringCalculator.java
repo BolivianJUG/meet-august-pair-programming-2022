@@ -1,5 +1,8 @@
 package org.bolivianjug.pairprogramming;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by julio.rocha on 17/8/22.
  *
@@ -14,6 +17,14 @@ public class StringCalculator {
         if (numbersInput.isEmpty()) {
             return 0;
         }
+        String[] numbers = getNumbers(numbersInput);
+        List<String> negativeNumbers = new ArrayList<>();
+        int result = exeteAddProcess(numbers, negativeNumbers);
+        throwIfNegativeNumbersArePresent(negativeNumbers);
+        return result;
+    }
+
+    private static String[] getNumbers(String numbersInput) {
         String effectiveDelimiter = BASE_DELIMITER;
         if (numbersInput.startsWith(DELIMITER_PREFIX)) {
             String[] split = numbersInput.split("\n");
@@ -21,11 +32,31 @@ public class StringCalculator {
             numbersInput = split[1];
             effectiveDelimiter = customDelimiter;
         }
-        String[] numbers = numbersInput.split(effectiveDelimiter);
+        return numbersInput.split(effectiveDelimiter);
+    }
+
+    private static int exeteAddProcess(String[] numbers, List<String> negativeNumbers) {
         int result = 0;
         for (String number : numbers) {
-            result += Integer.parseInt(number);
+            int value = Integer.parseInt(number);
+            if (value < 0) {
+                negativeNumbers.add(number);
+            }
+            result += value;
         }
         return result;
+    }
+
+    private static void throwIfNegativeNumbersArePresent(List<String> negativeNumbers) {
+        if (!negativeNumbers.isEmpty()) {
+            String numbersMessage = String.join(",", negativeNumbers);
+            throw new NegativeNumber(numbersMessage);
+        }
+    }
+
+    public static class NegativeNumber extends RuntimeException {
+        public NegativeNumber(String numbersMessage) {
+            super("Negativos no permitidos: " + numbersMessage);
+        }
     }
 }
