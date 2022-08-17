@@ -54,4 +54,9 @@ La siguiente entrada NO está bien: "1,\n" (no es necesario probarlo, aclarando 
     public void manejoSaltoLineaNegativo() {
         Assertions.assertEquals(620, stringCalculator.add("100\n200,310,10,\n"));
     }
+    @Test
+    @DisplayName("delimitador personalizado")
+    public void admitirDiferentesDelimitadores() {
+        Assertions.assertEquals(660, stringCalculator.add("//;\n100;200;310;10;40"));
+    }
 }
