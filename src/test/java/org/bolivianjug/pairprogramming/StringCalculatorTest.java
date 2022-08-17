@@ -1,8 +1,6 @@
 package org.bolivianjug.pairprogramming;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 /**
  * Created by julio.rocha on 17/8/22.
@@ -10,10 +8,17 @@ import org.junit.jupiter.api.Test;
  * @author julio.rocha
  */
 class StringCalculatorTest {
+
+    private StringCalculator stringCalculator;
+
+    @BeforeEach
+    void setUp() {
+        stringCalculator = new StringCalculator();
+    }
+
     @Test
     @DisplayName("Sumar hasta 2 numeros, toda cadena vacia debe retornar 0")
     public void requrimiento1() {
-        StringCalculator stringCalculator = new StringCalculator();
         Assertions.assertEquals(0, stringCalculator.add(""));
         Assertions.assertEquals(1, stringCalculator.add("1"));
         Assertions.assertEquals(3, stringCalculator.add("1,2"));
@@ -21,15 +26,32 @@ class StringCalculatorTest {
 
     @Test
     public void validacionCasoNegativos() {
-        StringCalculator stringCalculator = new StringCalculator();
         Assertions.assertEquals(-3, stringCalculator.add("-1,-2"));
     }
 
     @Test
     public void manejoDeCantidadesDesconocidas() {
-        StringCalculator stringCalculator = new StringCalculator();
         Assertions.assertEquals(6, stringCalculator.add("1,2,3"));
         Assertions.assertEquals(610, stringCalculator.add("100,200,310"));
         Assertions.assertEquals(0, stringCalculator.add("100,-200,110,-10"));
+    }
+
+    /*
+    * Permitir que el método add maneje nuevas líneas(\n) entre números (en lugar de comas):
+Por ejemplo, la siguiente entrada está es correcta: "1\n2,3" (será igual a 6)
+La siguiente entrada NO está bien: "1,\n" (no es necesario probarlo, aclarando el ejemplo)
+    * */
+    @Test
+    public void manejoDeSaltosDeLinea() {
+        Assertions.assertEquals(6, stringCalculator.add("1\n2,3"));
+        Assertions.assertEquals(621, stringCalculator.add("100\n200,310,10\n1"));
+        Assertions.assertEquals(0, stringCalculator.add("100,-200,110\n-10"));
+    }
+
+
+    @Test
+    @Disabled
+    public void manejoSaltoLineaNegativo() {
+        Assertions.assertEquals(620, stringCalculator.add("100\n200,310,10,\n"));
     }
 }
